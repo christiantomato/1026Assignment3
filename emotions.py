@@ -52,8 +52,46 @@ def make_keyword_dict(keyword_file_name):
 
 
 def classify_comment_emotion(comment, keywords):
-    # add your code here and remove the pass keyword on the next line
-    pass
+    #counters for each emotion
+    anger = 0
+    joy = 0
+    fear = 0
+    trust = 0
+    sadness = 0
+    anticipation = 0
+
+    #first clean the comment
+    comment = clean_text(comment)
+    #split the comment into words
+    comment = comment.split()
+
+    #loop through the entire list of words
+    for word in comment:
+        #if the word is in the keywords dictionary
+        if word in keywords:
+            #total up its score
+            anger += keywords[word]["anger"]
+            joy += keywords[word]["joy"]
+            fear += keywords[word]["fear"]
+            trust += keywords[word]["trust"]
+            sadness += keywords[word]["sadness"]
+            anticipation += keywords[word]["anticipation"]
+
+    #put all the scores and their names into a list
+    emotions_scores = [anger, joy, fear, trust, sadness, anticipation]
+
+    #loop through the scores and find the highest
+    #starting with anger as the sentinel will ensure correct order if ties are present
+    comment_emotion = "anger"
+    highest_score = anger
+    for i in range(len(emotions_scores)):
+        #if the score is higher than current
+        if emotions_scores[i] > highest_score:
+            #set new current highest score and also set the name of the emotion
+            comment_emotion = EMOTIONS[i]
+            highest_score = emotions_scores[i]
+
+    return comment_emotion
 
 
 def make_comments_list(filter_country, comments_file_name):
@@ -100,5 +138,4 @@ def make_comments_list(filter_country, comments_file_name):
 def make_report(comment_list, keywords, report_filename):
     # add your code here and remove the pass keyword on the next line
     pass
-
 
