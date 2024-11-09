@@ -52,7 +52,7 @@ def make_keyword_dict(keyword_file_name):
 
 
 def classify_comment_emotion(comment, keywords):
-    #counters for each emotion
+    #counters for each emotion in each INDIVIDUAL comment
     anger = 0
     joy = 0
     fear = 0
@@ -77,13 +77,13 @@ def classify_comment_emotion(comment, keywords):
             sadness += keywords[word]["sadness"]
             anticipation += keywords[word]["anticipation"]
 
-    #put all the scores and their names into a list
+    #put all the scores into a list, in the same order as the EMOTIONS list
     emotions_scores = [anger, joy, fear, trust, sadness, anticipation]
 
-    #loop through the scores and find the highest
     #starting with anger as the sentinel will ensure correct order if ties are present
     comment_emotion = "anger"
     highest_score = anger
+    #loop through the scores and find the highest
     for i in range(len(emotions_scores)):
         #if the score is higher than current
         if emotions_scores[i] > highest_score:
@@ -136,6 +136,45 @@ def make_comments_list(filter_country, comments_file_name):
 
 
 def make_report(comment_list, keywords, report_filename):
-    # add your code here and remove the pass keyword on the next line
-    pass
+    #counters for the emotion each COMMENT was classified with
+    anger = 0
+    joy = 0
+    fear = 0
+    trust = 0
+    sadness = 0
+    anticipation = 0
 
+    #put all the scores into a list, same order as EMOTIONS list
+    emotions_scores = [anger, joy, fear, trust, sadness, anticipation]
+
+    #create the new file with the designated name
+    file = open(report_filename, "w")
+
+    #make anger the sentinel value to ensure tie order
+    most_common_emotion = "anger"
+    highest_score = anger
+    #go through the list of comments and classify the emotion, as well as keep track of highest emotion
+    for comment in comment_list:
+        emotion = classify_comment_emotion(comment["text"], keywords)
+        #figure out which emotion it was classified as
+        for i in range(len(EMOTIONS)):
+            if emotion == EMOTIONS[i]:
+                #add counter to the corresponding emotion
+                emotions_scores[i] += 1
+
+            #finding most common emotion
+            if emotions_scores[i] > highest_score:
+                #set new current highest score and also set the name of the emotion
+                most_common_emotion = EMOTIONS[i]
+                highest_score = emotions_scores[i]
+
+    #write out the data
+    file.write("Most common emotion: " + most_common_emotion)
+
+    return most_common_emotion
+
+
+#test lines
+keyword_dict = make_keyword_dict("keywords.tsv")
+
+make_report(make_comments_list("all", "comments.csv"), keyword_dict, "report.txt")
