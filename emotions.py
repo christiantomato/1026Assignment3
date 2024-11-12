@@ -169,12 +169,25 @@ def make_report(comment_list, keywords, report_filename):
                 highest_score = emotions_scores[i]
 
     #write out the data
-    file.write("Most common emotion: " + most_common_emotion)
+    file.write("Most common emotion: " + most_common_emotion + "\n\n")
+    file.write("Emotion Totals\n")
+
+    #find total of scores to calculate average
+    total_scores = 0
+    for score in emotions_scores:
+        total_scores += score
+
+    #loop through and write out emotion scores and percentage
+    for i in range(len(EMOTIONS)):
+        line = (EMOTIONS[i] + ": " + str(emotions_scores[i]) + " ({percentage:.2f}%)\n")
+        file.write(line.format(percentage=(emotions_scores[i]/total_scores)*100))
 
     return most_common_emotion
 
-
 #test lines
 keyword_dict = make_keyword_dict("keywords.tsv")
+comments_list = make_comments_list("all", "comments.csv")
 
-make_report(make_comments_list("all", "comments.csv"), keyword_dict, "report.txt")
+#for comment in comments_list:
+    #print(classify_comment_emotion(comment["text"], keyword_dict))
+make_report(comments_list, keyword_dict, "report.txt")
