@@ -83,6 +83,7 @@ def classify_comment_emotion(comment, keywords):
     #starting with anger as the sentinel will ensure correct order if ties are present
     comment_emotion = "anger"
     highest_score = anger
+
     #loop through the scores and find the highest
     for i in range(len(emotions_scores)):
         #if the score is higher than current
@@ -92,7 +93,6 @@ def classify_comment_emotion(comment, keywords):
             highest_score = emotions_scores[i]
 
     return comment_emotion
-
 
 def make_comments_list(filter_country, comments_file_name):
     #make a list with each entry being a dictionary with the comment information
@@ -150,26 +150,40 @@ def make_report(comment_list, keywords, report_filename):
     #create the new file with the designated name
     file = open(report_filename, "w")
 
-    #make anger the sentinel value to ensure tie order
-    most_common_emotion = "anger"
-    highest_score = anger
+    #raise a runtime error if list is empty
+    if len(comment_list) <= 0:
+        raise RuntimeError
+
+    #return variable, highest score, and a variable for checking for ties
+    most_common_emotion = ""
+    highest_score = 0
+    highest_score_index = 0
+
     #go through the list of comments and classify the emotion, as well as keep track of highest emotion
     for comment in comment_list:
         emotion = classify_comment_emotion(comment["text"], keywords)
+        print(emotion)
         #figure out which emotion it was classified as
         for i in range(len(EMOTIONS)):
             if emotion == EMOTIONS[i]:
                 #add counter to the corresponding emotion
                 emotions_scores[i] += 1
 
-            #finding most common emotion
-            if emotions_scores[i] > highest_score:
-                #set new current highest score and also set the name of the emotion
+            #finding most common emotion, and checking for ties
+            print(emotions_scores)
+            if emotions_scores[i] > highest_score or (emotions_scores[i] == highest_score and i < highest_score_index):
+                #set new current highest score, name of emotion, and the index
                 most_common_emotion = EMOTIONS[i]
                 highest_score = emotions_scores[i]
+                highest_score_index = i
+                #can break here to save time
+                print("most " + most_common_emotion)
+                break
+
 
     #write out the data
-    file.write("Most common emotion: " + most_common_emotion + "\n\n")
+    file.write("Most common emotion: " + most_common_emotion)
+    file.write("\n\n")
     file.write("Emotion Totals\n")
 
     #find total of scores to calculate average
@@ -183,4 +197,3 @@ def make_report(comment_list, keywords, report_filename):
         file.write(line.format(percentage=(emotions_scores[i]/total_scores)*100))
 
     return most_common_emotion
-
