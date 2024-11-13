@@ -184,10 +184,3 @@ def make_report(comment_list, keywords, report_filename):
 
     return most_common_emotion
 
-#test lines
-keyword_dict = make_keyword_dict("keywords.tsv")
-comments_list = make_comments_list("all", "comments.csv")
-
-#for comment in comments_list:
-    #print(classify_comment_emotion(comment["text"], keyword_dict))
-make_report(comments_list, keyword_dict, "report.txt")
