@@ -1,8 +1,18 @@
-# add a comment here with your name, email, and student number
-# you can not add any import lines to this file
+"""
+******************************
+CS 1026 - Assignment 3 – YouTube Comments
+Code by: Christian Tamayo
+Student ID: ctamayo, 251433749
+File created: Nov 16, 2024
+******************************
+This file contains all the important functions that
+help classify and make a report on the comments provided.
+Functions like make_keyword_dict and make_comments_list
+help organize the data so that we can analyze it efficiently
+and finally make a report on the most common emotion.
+"""
 
 EMOTIONS = ['anger', 'joy', 'fear', 'trust', 'sadness', 'anticipation']
-
 
 def clean_text(comment):
     #replace any characters that are not letters with a space and convert to lowercase
@@ -20,7 +30,6 @@ def clean_text(comment):
             cleaned_string += char
 
     return cleaned_string
-
 
 def make_keyword_dict(keyword_file_name):
     # make a dictionary with the keys being the words, and the values as a dictionary of each emotion value

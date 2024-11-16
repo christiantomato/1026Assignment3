@@ -1,5 +1,16 @@
-# add a comment here with your name, email, and student number.
-# do not add any additional import lines to this file.
+"""
+******************************
+CS 1026 - Assignment 3 – YouTube Comments
+Code by: Christian Tamayo
+Student ID: ctamayo, 251433749
+File created: Nov 16, 2024
+******************************
+This file asks the user to input the information needed
+to analyze the data such as the files and the country we are
+filtering by. It makes sure to catch exceptions such as input
+and output to make sure the program does not crash. Finally,
+it creates a report on the data.
+"""
 
 import os.path
 from emotions import *
